@@ -21,8 +21,6 @@ const TabsLayout = () => {
           borderTopColor: "#E1E8ED",
           height: 50 + insets.bottom,
           paddingTop: 8,
-          borderTopLeftRadius: 34,
-          borderTopRightRadius: 34,
         },
 
         headerShown: false,
