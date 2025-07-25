@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 const HomeScreen = () => {
   useUserSync();
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       {/* HEADER */}
       <View className="flex-row justify-between items-center px-4 py-3 border-b border-gray-100">
         <Ionicons
