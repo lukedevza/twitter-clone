@@ -53,3 +53,8 @@ export interface PostCardProps {
   isLiked?: boolean;
   currentUser: User;
 }
+
+export interface CommentsModalProps {
+  selectedPost: Post;
+  onClose: () => void;
+}
