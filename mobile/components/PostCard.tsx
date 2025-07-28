@@ -4,7 +4,7 @@ import { PostCardProps } from "@/types";
 import { formatDate, formatNumber } from "@/utils/formatters";
 import { AntDesign, Feather } from "@expo/vector-icons";
 
-const PostCard = ({ post, onLike, onDelete, currentUser, isLiked }: PostCardProps) => {
+const PostCard = ({ post, onLike, onDelete, currentUser, isLiked, onComment }: PostCardProps) => {
   const isOwnPost = post.user._id === currentUser._id;
 
   const handleDelete = () => {
@@ -58,7 +58,7 @@ const PostCard = ({ post, onLike, onDelete, currentUser, isLiked }: PostCardProp
           <View className="flex-row justify-between max-w-xs">
             <TouchableOpacity
               className="flex-row items-center"
-              onPress={() => {}}
+              onPress={() => onComment(post)}
             >
               <Feather
                 name="message-circle"
