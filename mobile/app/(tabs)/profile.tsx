@@ -1,4 +1,12 @@
-import { View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
 import React from "react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,6 +15,8 @@ import { Feather } from "@expo/vector-icons";
 import { formatDateToMonthDay } from "@/utils/formatters";
 import { usePosts } from "@/hooks/usePosts";
 import PostsList from "@/components/PostsList";
+import { useProfile } from "@/hooks/useProfile";
+import EditProfileModal from "@/components/EditProfileModal";
 
 const ProfileScreen = () => {
   const { currentUser, isLoading } = useCurrentUser();
@@ -17,6 +27,17 @@ const ProfileScreen = () => {
     refetch: refetchPosts,
     isLoading: isRefetching,
   } = usePosts(currentUser?.username);
+
+  const {
+    isEditModalVisable,
+    openEditModal,
+    closeEditModal,
+    formData,
+    saveProfile,
+    updateFormField,
+    isUpdating,
+    refetch: refetchProfile,
+  } = useProfile();
 
   if (isLoading) {
     return (
@@ -30,7 +51,10 @@ const ProfileScreen = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView
+      className="flex-1 bg-white"
+      edges={["top"]}
+    >
       {/* HEADER */}
       <View className="flex-row items-center justify-between px-4 py-3 border-b border-gray-100">
         <View>
@@ -46,6 +70,16 @@ const ProfileScreen = () => {
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 100 + insets.bottom }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={() => {
+              refetchPosts();
+              refetchProfile();
+            }}
+            tintColor="#1DA1F2"
+          />
+        }
       >
         <Image
           source={{
@@ -63,7 +97,10 @@ const ProfileScreen = () => {
               source={{ uri: currentUser.profilePicture }}
               className="w-32 h-32 rounded-full border-4 border-white"
             />
-            <TouchableOpacity className="border border-gray-300 px-6 py-2 rounded-full">
+            <TouchableOpacity
+              className="border border-gray-300 px-6 py-2 rounded-full"
+              onPress={openEditModal}
+            >
               <Text className="font-semibold text-gray-900">Edit Profile</Text>
             </TouchableOpacity>
           </View>
@@ -126,6 +163,14 @@ const ProfileScreen = () => {
 
         <PostsList username={currentUser?.username} />
       </ScrollView>
+      <EditProfileModal
+        isVisible={isEditModalVisable}
+        onClose={closeEditModal}
+        formData={formData}
+        saveProfile={saveProfile}
+        updateFormField={updateFormField}
+        isUpdating={isUpdating}
+      />
     </SafeAreaView>
   );
 };
