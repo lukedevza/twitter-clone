@@ -21,3 +21,27 @@ export const formatDate = (dateString: string): string => {
   if (days < 7) return `${days}d`;
   return `${Math.floor(days / 7)}w`;
 };
+
+export const formatDateToMonthDay = (dateString: string) => {
+  const date = new Date(dateString);
+
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(date);
+
+  const getOrdinalSuffix = (n: number) => {
+    if (n >= 11 && n <= 13) return `${n}th`;
+    switch (n % 10) {
+      case 1:
+        return `${n}st`;
+      case 2:
+        return `${n}nd`;
+      case 3:
+        return `${n}rd`;
+      default:
+        return `${n}th`;
+    }
+  };
+
+  return `${month} ${getOrdinalSuffix(day)} ${year}`;
+};
